@@ -106,12 +106,69 @@
 	/****Inherit the new Objects into Scroll*****************************/
 
 	Scroll.extend({
+		moveFromDot:function(degree,radius,time){
+			var objLength     = this.obj.length;
+			var countTime     = 1 ;
+			var dotTop        = new Array();
+			var dotLeft       = new Array();
+			var topGrowPerMS  = 0-radius/time*Math.sin(Math.PI*degree/180);
+			var leftGrowPerMS = radius/time*Math.cos(Math.PI*degree/180);
+			this.setAbsolute();
+			for(var i = 0;i < objLength ; ++i ){
+				dotTop[i]  = this.obj[i].offsetTop;
+				dotLeft[i] = this.obj[i].offsetLeft;
+			};
+			var theObj = this.obj;
+			//move the nodes
+			var t = setInterval(function(){
+				++countTime;
+				for(var i = 0;i < objLength ; ++i ){
+					theObj[i].style.top  = (dotTop[i]  +  countTime*topGrowPerMS) +"px";
+					theObj[i].style.left = (dotLeft[i] +  countTime*leftGrowPerMS)+"px";
+					console.log(countTime);
+					if(countTime >= time){
+						clearInterval(t);
+					};
+				};
+			},1);
+		},
+
+		bounce:function(degree,yTop,time){
+			var objLength = this.obj.length;
+			var countTime = 1 ;
+			const gravity = 10;
+			var moveX;
+			var moveY;
+			var timeSpeed = 2*Math.sqrt(2*yTop/gravity)/time;
+			var Vy = Math.sqrt(2*gravity*yTop);
+			var Vx = Vy/Math.tan(Vy);
+			this.setAbsolute();
+
+			var t = setInterval(function(){
+				++countTime;
+				for(var i = 0;i < objLength ; ++i ){
+					theObj[i].style.top  = (dotTop[i]  +  countTime*topGrowPerMS) +"px";
+					theObj[i].style.left = (dotLeft[i] +  countTime*leftGrowPerMS)+"px";
+					console.log(countTime);
+					if(countTime >= time){
+						clearInterval(t);
+					};
+				};
+			},1);
+
+		}
+
+	});
+	/**Inherit the new Objects into Scroll 
+	 * in order to change property of the nodes
+	 */
+	Scroll.extend({
 		expandWidth:function(theLength){
 			//document.write(0);
-			var length   = theLength;
+			var length    = theLength;
+			var objLength = this.obj.length;
 			var objWidth;
 			var finalLength;
-			var objLength = this.obj.length;
 			for(var i = 0;i < objLength ; ++i ){
 				objWidth =  parseInt(this.obj[i].style.width);
 				finalLength = parseInt(objWidth +length);
@@ -119,49 +176,21 @@
 				this.obj[i].style.width = finalLength+"px";
 			}	
 		},
-
-		moveFromDot:function(degree,radius,time){
-			var a;
+		setAbsolute:function(){
 			var objLength = this.obj.length;
 			var countTime = 1 ;
-			var dotTop = new Array(3);
-			var dotLeft = new Array(3);
-			var topGrowPerMS  = radius/time*Math.sin(Math.PI*degree/180);
-			var leftGrowPerMS = radius/time*Math.cos(Math.PI*degree/180);
-			console.log(topGrowPerMS,leftGrowPerMS);
+			var dotTop;
+			var dotLeft;
 			for(var i = 0;i < objLength ; ++i ){
-				dotTop[i]  = this.obj[i].offsetTop;
-				dotLeft[i] = this.obj[i].offsetLeft;
-				this.obj[i].style.top      = dotTop[i] + "px";
-				this.obj[i].style.left     = dotLeft[i] + "px";
+				dotTop  = this.obj[i].offsetTop;
+				dotLeft = this.obj[i].offsetLeft;
+				this.obj[i].style.top      = dotTop + "px";
+				this.obj[i].style.left     = dotLeft + "px";
 			};
 			for(var i = 0;i < objLength ; ++i ){
 				this.obj[i].style.position = "absolute";
 			};
-
-			//for (; countTime <= time ; ++countTime){
-				//setTimeout(function(){},1);
-			var theObj = new Array(1);
-			theObj = this.obj;
-			var move = function(){
-				for(var i = 0;i < objLength ; ++i ){
-					document.getElementsByClassName("hehe")[i].style.top      = (dotTop[i]  +  countTime*topGrowPerMS) +"px";
-					document.getElementsByClassName("hehe")[i].style.left     = (dotLeft[i] +  countTime*leftGrowPerMS)+"px";
-					console.log(this.obj[i].style.top,this.obj[i].style.left);
-				};
-				++countTime;
-				if(countTime <= time){
-					a = setTimeout("move()",1);
-				}
-				else{
-					clearTimeout(a);
-				}
-			};
-			move();		
-			//};
-
 		},
-
 	});
 
 	/****End to inherit the new Objects into Scroll**********************/

@@ -1,3 +1,4 @@
 var classClicked = function() {
-	Scroll(".hehe").moveFromDot(0,100,3000);
+	Scroll(".hehe").moveFromDot(30,300,300);
+	Scroll(".hehe2").moveFromDot(-30,300,300);
 }
