@@ -120,8 +120,46 @@
 			}	
 		},
 
-		movFromDot:function(degree,radius){
-			var top = this.obj.style.
+		moveFromDot:function(degree,radius,time){
+			var a;
+			var objLength = this.obj.length;
+			var countTime = 1 ;
+			var dotTop = new Array(3);
+			var dotLeft = new Array(3);
+			var topGrowPerMS  = radius/time*Math.sin(Math.PI*degree/180);
+			var leftGrowPerMS = radius/time*Math.cos(Math.PI*degree/180);
+			console.log(topGrowPerMS,leftGrowPerMS);
+			for(var i = 0;i < objLength ; ++i ){
+				dotTop[i]  = this.obj[i].offsetTop;
+				dotLeft[i] = this.obj[i].offsetLeft;
+				this.obj[i].style.top      = dotTop[i] + "px";
+				this.obj[i].style.left     = dotLeft[i] + "px";
+			};
+			for(var i = 0;i < objLength ; ++i ){
+				this.obj[i].style.position = "absolute";
+			};
+
+			//for (; countTime <= time ; ++countTime){
+				//setTimeout(function(){},1);
+			var theObj = new Array(1);
+			theObj = this.obj;
+			var move = function(){
+				for(var i = 0;i < objLength ; ++i ){
+					document.getElementsByClassName("hehe")[i].style.top      = (dotTop[i]  +  countTime*topGrowPerMS) +"px";
+					document.getElementsByClassName("hehe")[i].style.left     = (dotLeft[i] +  countTime*leftGrowPerMS)+"px";
+					console.log(this.obj[i].style.top,this.obj[i].style.left);
+				};
+				++countTime;
+				if(countTime <= time){
+					a = setTimeout("move()",1);
+				}
+				else{
+					clearTimeout(a);
+				}
+			};
+			move();		
+			//};
+
 		},
 
 	});
